@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://e1hfw4icaggx"]
+
+[ext_resource type="Texture2D" uid="uid://b6i0qcvxde01i" path="res://assets/swords.png" id="1_d81rb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4wf"]
+size = Vector2(164.5, 254)
+
+[node name="Card" type="Node2D"]
+
+[node name="CardImage" type="Sprite2D" parent="."]
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(0.3, 0.452)
+texture = ExtResource("1_d81rb")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_6u4wf")
