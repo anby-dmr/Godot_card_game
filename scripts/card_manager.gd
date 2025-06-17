@@ -26,9 +26,17 @@ func _input(event):
 		if event.is_pressed():
 			var card = raycast_check_for_card()
 			if card:
-				card_being_dragged = card
+				start_drag(card)
 		else:
-			card_being_dragged = null
+			finish_drag(card_being_dragged)
+
+func start_drag(card):
+	card_being_dragged = card
+	card.scale = Vector2(1, 1)
+	
+func finish_drag(card):
+	card.scale = Vector2(1.05, 1.05)
+	card_being_dragged = null
 
 func connect_card_signals(card):
 	card.connect("hovered", on_hovered_card)
@@ -48,6 +56,9 @@ func on_hovered_off_card(card):
 	#if is_hovering_on_card:
 		#highlight_card(card, false)
 		#is_hovering_on_card = false
+		
+	if card_being_dragged != null:
+		return
 		
 	highlight_card(card, false)
 	var new_card_hovered = raycast_check_for_card()
