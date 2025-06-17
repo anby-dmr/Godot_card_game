@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://e1hfw4icaggx"]
+[gd_scene load_steps=4 format=3 uid="uid://e1hfw4icaggx"]
 
+[ext_resource type="Script" uid="uid://dgfb7g2kyubfd" path="res://scripts/card.gd" id="1_6u4wf"]
 [ext_resource type="Texture2D" uid="uid://b6i0qcvxde01i" path="res://assets/swords.png" id="1_d81rb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4wf"]
 size = Vector2(164.5, 254)
 
 [node name="Card" type="Node2D"]
+script = ExtResource("1_6u4wf")
 
 [node name="CardImage" type="Sprite2D" parent="."]
 position = Vector2(0, 4.76837e-07)
@@ -17,3 +19,6 @@ texture = ExtResource("1_d81rb")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(-0.25, 0)
 shape = SubResource("RectangleShape2D_6u4wf")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
