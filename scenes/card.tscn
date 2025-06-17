@@ -4,14 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://b6i0qcvxde01i" path="res://assets/swords.png" id="1_d81rb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4wf"]
-size = Vector2(164.5, 254)
+size = Vector2(164.5, 220)
 
 [node name="Card" type="Node2D"]
 script = ExtResource("1_6u4wf")
 
 [node name="CardImage" type="Sprite2D" parent="."]
 position = Vector2(0, 4.76837e-07)
-scale = Vector2(0.3, 0.452)
+scale = Vector2(0.3, 0.4)
 texture = ExtResource("1_d81rb")
 
 [node name="Area2D" type="Area2D" parent="."]

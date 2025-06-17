@@ -1,6 +1,9 @@
 extends Node2D
 
-var COLLISION_MASK_CARD = 1
+# Only specify mask=1 to "card",
+# this ensures only "card" instance is detected in raycast() method.
+const COLLISION_MASK_CARD = 1
+const COLLISION_MASK_CARD_SLOT = 2
 
 var card_being_dragged
 var screen_size
@@ -24,11 +27,12 @@ func _process(delta: float) -> void:
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
-			var card = raycast_check_for_card()
+			var card = raycast_check(COLLISION_MASK_CARD)
 			if card:
 				start_drag(card)
 		else:
-			finish_drag(card_being_dragged)
+			if card_being_dragged:
+				finish_drag(card_being_dragged)
 
 func start_drag(card):
 	card_being_dragged = card
@@ -36,6 +40,11 @@ func start_drag(card):
 	
 func finish_drag(card):
 	card.scale = Vector2(1.05, 1.05)
+	var card_slot = raycast_check(COLLISION_MASK_CARD_SLOT)
+	if card_slot and card_slot.card_in_slot == false:
+		card_being_dragged.position = card_slot.position
+		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+		card_slot.card_in_slot = true
 	card_being_dragged = null
 
 func connect_card_signals(card):
@@ -61,7 +70,7 @@ func on_hovered_off_card(card):
 		return
 		
 	highlight_card(card, false)
-	var new_card_hovered = raycast_check_for_card()
+	var new_card_hovered = raycast_check(COLLISION_MASK_CARD)
 	if new_card_hovered:
 		highlight_card(new_card_hovered, true)
 	else:
@@ -77,12 +86,12 @@ func highlight_card(card, hovered):
 
 # Get the card object hovered by mouse (the atop one)
 # Clicked check is in _input() method.
-func raycast_check_for_card():
+func raycast_check(MASK):
 	var state_space = get_world_2d().direct_space_state
 	var clickParams = PhysicsPointQueryParameters2D.new()
 	clickParams.position = get_global_mouse_position()
 	clickParams.collide_with_areas = true
-	clickParams.collision_mask = COLLISION_MASK_CARD
+	clickParams.collision_mask = MASK
 	var res = state_space.intersect_point(clickParams)
 	if len(res) > 0:
 		return find_atop_card(res)
