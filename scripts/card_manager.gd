@@ -64,7 +64,7 @@ func highlight_card(card, hovered):
 		card.scale = Vector2(1, 1)
 		card.z_index = 1
 
-# Get the card object hovered by mouse.
+# Get the card object hovered by mouse (the atop one)
 # Clicked check is in _input() method.
 func raycast_check_for_card():
 	var state_space = get_world_2d().direct_space_state
@@ -74,5 +74,17 @@ func raycast_check_for_card():
 	clickParams.collision_mask = COLLISION_MASK_CARD
 	var res = state_space.intersect_point(clickParams)
 	if len(res) > 0:
-		return res[0].collider.get_parent()
+		return find_atop_card(res)
 	return null
+
+func find_atop_card(cards):
+	var atop_card = cards[0].collider.get_parent()
+	var atop_card_z = atop_card.z_index
+	
+	for res in cards:
+		var card = res.collider.get_parent()
+		if card.z_index > atop_card_z:
+			atop_card = card
+			atop_card_z = card.z_index
+		
+	return atop_card
