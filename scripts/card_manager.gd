@@ -8,11 +8,13 @@ const COLLISION_MASK_CARD_SLOT = 2
 var card_being_dragged
 var screen_size
 var is_hovering_on_card
+var player_hand_ref
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	is_hovering_on_card = false
+	player_hand_ref = $"../PlayerHand"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -42,9 +44,14 @@ func finish_drag(card):
 	card.scale = Vector2(1.05, 1.05)
 	var card_slot = raycast_check(COLLISION_MASK_CARD_SLOT)
 	if card_slot and card_slot.card_in_slot == false:
-		card_being_dragged.position = card_slot.position
-		card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
+		card.position = card_slot.position
+		card.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot.card_in_slot = true
+		player_hand_ref.remove_from_hand(card)
+	else:
+		# Can also directly use player_hand_ref.animate_card_position()
+		# This way is less breaking the abstraction barrier
+		player_hand_ref.add_to_hand(card)
 	card_being_dragged = null
 
 func connect_card_signals(card):
