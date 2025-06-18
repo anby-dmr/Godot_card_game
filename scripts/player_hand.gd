@@ -4,7 +4,7 @@ const INIT_HAND_COUNT = 8
 const CARD_SCENE_PATH = "res://scenes/card.tscn"
 const CARD_WIDTH = 200
 const HAND_Y_POSITION = 890
-const TWEEN_SPEED = 0.1
+const TWEEN_SPEED = 0.4
 
 var player_hand = []
 var center_screen_x
@@ -50,8 +50,4 @@ func calculate_hand_position(index):
 	return x_offset
 
 func animate_card_position(card, pos):
-	# tween is an an animation technique 
-	# where you specify keyframes 
-	# and the computer interpolates the frames that appear between them. 
-	var tween = get_tree().create_tween()
-	tween.tween_property(card, "position", pos, TWEEN_SPEED)
+	CardUtils.animate_card_position(card, pos, TWEEN_SPEED)

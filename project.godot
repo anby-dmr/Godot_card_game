@@ -15,6 +15,10 @@ run/main_scene="uid://b2ngc6u2d8f3t"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+CardUtils="*res://scenes/card_utils.tscn"
+
 [display]
 
 window/size/viewport_width=1920

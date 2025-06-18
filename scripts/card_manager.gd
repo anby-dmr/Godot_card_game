@@ -4,6 +4,7 @@ extends Node2D
 # this ensures only "card" instance is detected in raycast() method.
 const COLLISION_MASK_CARD = 1
 const COLLISION_MASK_CARD_SLOT = 2
+const TWEEN_SPEED = 0.5
 
 var card_being_dragged
 var screen_size
@@ -20,10 +21,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if card_being_dragged:
 		var mouse_pos = get_global_mouse_position()
-		card_being_dragged.position = Vector2(
+		var card_pos = Vector2(
 			clamp(mouse_pos.x, 0, screen_size.x),
 			clamp(mouse_pos.y, 0, screen_size.y)
 		)
+		animate_card_position(card_being_dragged, card_pos)
 		
 # Called on your node whenever an input event occurs. 
 func _input(event):
@@ -44,7 +46,7 @@ func finish_drag(card):
 	card.scale = Vector2(1.05, 1.05)
 	var card_slot = raycast_check(COLLISION_MASK_CARD_SLOT)
 	if card_slot and card_slot.card_in_slot == false:
-		card.position = card_slot.position
+		animate_card_position(card, card_slot.position)
 		card.get_node("Area2D/CollisionShape2D").disabled = true
 		card_slot.card_in_slot = true
 		player_hand_ref.remove_from_hand(card)
@@ -115,3 +117,6 @@ func find_atop_card(cards):
 			atop_card_z = card.z_index
 		
 	return atop_card
+
+func animate_card_position(card, pos):
+	CardUtils.animate_card_position(card, pos, TWEEN_SPEED)
